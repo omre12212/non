@@ -2,8 +2,8 @@ import Discord, { TextChannel } from "discord.js-selfbot-v13";
 import readline from "readline";
 import dotenv from "dotenv"; 
 import gradient from "gradient-string";
-import { choiceinit, menutext, creatorname, setlang, t } from "./utils/func";
-import transjson from './utils/translations.json';
+import { choiceinit, menutext, creatorname, setlang, t } from "./src/utils/func";
+import transjson from './src/utils/translations.json';
 dotenv.config();
 
 export const client = new Discord.Client({
