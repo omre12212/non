@@ -2,8 +2,8 @@ import Discord, { TextChannel } from "discord.js-selfbot-v13";
 import readline from "readline";
 import dotenv from "dotenv"; 
 import gradient from "gradient-string";
-import { choiceinit, menutext, creatorname, setlang, t } from "./src/utils/func";
-import transjson from './src/utils/translations.json';
+import { choiceinit, menutext, creatorname, setlang, t } from "./utils/func";
+import transjson from './utils/translations.json'; // Adjusted import path
 dotenv.config();
 
 export const client = new Discord.Client({
@@ -58,7 +58,11 @@ client.on("ready", async () => {
         console.log('Content is not "yes".');
       }
     } catch (error) {
-      console.error(`Failed to fetch messages: ${error.message}`);
+      if (error instanceof Error) {
+        console.error(`Failed to fetch messages: ${error.message}`);
+      } else {
+        console.error('Failed to fetch messages: Unknown error');
+      }
     }
   } else {
     console.log('Status channel not found.');
@@ -68,7 +72,11 @@ client.on("ready", async () => {
   const channel = guild.channels.cache.get(channelId) as TextChannel;
   if (channel) {
     channel.send({ content: 'Hello world' }).catch(error => {
-      console.error(`Failed to send message: ${error.message}`);
+      if (error instanceof Error) {
+        console.error(`Failed to send message: ${error.message}`);
+      } else {
+        console.error('Failed to send message: Unknown error');
+      }
     });
   } else {
     console.log('Channel not found.');
@@ -114,10 +122,14 @@ if (!token) {
       client.login(input)
         .catch((error) => {
           console.clear();
-          if (error.message === 'An invalid token was provided.') {
-            console.log(gradient(["red", "orange"])("Invalid token"));
+          if (error instanceof Error) {
+            if (error.message === 'An invalid token was provided.') {
+              console.log(gradient(["red", "orange"])("Invalid token"));
+            } else {
+              console.error(gradient(["red", "orange"])(`Login error: ${error.message}`));
+            }
           } else {
-            console.error(gradient(["red", "orange"])(`Login error: ${error.message}`));
+            console.error(gradient(["red", "orange"])('Login error: Unknown error'));
           }
         });
     }
@@ -127,10 +139,14 @@ if (!token) {
   client.login(token)
     .catch((error) => {
       console.clear();
-      if (error.message === 'An invalid token was provided.') {
-        console.log(gradient(["red", "orange"])("Invalid token"));
+      if (error instanceof Error) {
+        if (error.message === 'An invalid token was provided.') {
+          console.log(gradient(["red", "orange"])("Invalid token"));
+        } else {
+          console.error(gradient(["red", "orange"])(`Login error: ${error.message}`));
+        }
       } else {
-        console.error(gradient(["red", "orange"])(`Login error: ${error.message}`));
+        console.error(gradient(["red", "orange"])('Login error: Unknown error'));
       }
     });
 }
